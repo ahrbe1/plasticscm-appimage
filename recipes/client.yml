@@ -1,0 +1,32 @@
+app: Plastic_SCM
+ingredients:
+  dist: bionic
+  packages:
+    - plasticscm-client-gtk
+    - plasticscm-certtools-mono4
+    - plasticscm-client-core
+    - plasticscm-gnome-sharp-mono4
+    - plasticscm-gtk-sharp-mono4
+    - plasticscm-mono4
+    - plasticscm-theme
+  sources:
+    - deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe
+    - deb https://www.plasticscm.com/plasticrepo/stable/ubuntu
+  script:
+    - pwd
+    - apt-get download plasticscm-client-gtk plasticscm-certtools-mono4 plasticscm-client-core plasticscm-gnome-sharp-mono4 plasticscm-gtk-sharp-mono4 plasticscm-mono4 plasticscm-theme
+script:
+  - pwd
+  - mv usr/share/applications/plasticx.desktop Plastic_SCM.desktop
+  - cp opt/plasticscm5/theme/gtk/icons/gtkplastic.png opt/plasticscm5/theme/gtk/icons/gtkplastic.ico.png
+  - rm usr/bin/cm
+  - rm usr/bin/gluon
+  - rm usr/bin/gtkmergetool
+  - rm usr/bin/gtkplastic
+  - rm usr/bin/legacygluon
+  - rm usr/bin/legacyplasticgui
+  - rm usr/bin/plasticgui
+  - rm usr/bin/plasticapi
+  - rm AppRun
+  - ln -s opt/plasticscm5/client/linplasticx AppRun
+
