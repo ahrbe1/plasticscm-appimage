@@ -1,5 +1,5 @@
 *.AppImage
-squashfs-root
 *.log
 *.swp
-
+squashfs-root
+out

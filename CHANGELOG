@@ -2,6 +2,7 @@
 * Fixed: errors related to failed loading of gio modules
 * Added: Build process now generates a build.log file
 * Added: CHANGELOG
+* Changed: move output to out/ folder
 
 2022-06-21
 * Changed: Check for and apply any additional security updates

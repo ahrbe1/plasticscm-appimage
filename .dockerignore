@@ -3,6 +3,7 @@
 *.AppImage
 *.sh
 *.swp
+out
 LICENSE
 CHANGELOG
 Dockerfile

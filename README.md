@@ -18,7 +18,7 @@ server software.
 
 Pull requests welcome to fix bugs or add capability.
 
-Plastic SCM folks: Please, please fix your Linux version.
+Plastic SCM folks: Please, please fix the Linux version.
 
 ## Prerequisites
 
@@ -30,6 +30,6 @@ You only need access to a Linux machine with Docker on it.
 $ git clone https://github.com/ahrbe1/plasticscm-appimage.git
 $ cd plasticscm-appimage
 $ ./build-appimage.sh
-$ ./Plastic_SCM_Client.glibc2.25-x86_64.AppImage
+$ ./out/Plastic_SCM_Client.glibc2.25-x86_64.AppImage
 ```
 
