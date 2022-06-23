@@ -1,3 +1,6 @@
+2022-06-23
+* Added: More content to the README.md
+
 2022-06-22
 * Fixed: errors related to failed loading of gio modules
 * Added: Build process now generates a build.log file
