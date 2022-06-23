@@ -3,9 +3,9 @@
 * Added: Build process now generates a build.log file
 * Added: CHANGELOG
 
-2022-06-20
+2022-06-21
 * Changed: Check for and apply any additional security updates
 
-2022-06-19
+2022-06-20
 * Initial release
 
