@@ -34,5 +34,5 @@ RUN wget https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appi
 COPY recipes /root/recipes
 ENV PATH=$PATH:/usr/lib/x86_64-linux-gnu/glib-2.0/
 ENV ARCH=x86_64
-RUN ./pkg2appimage recipes/client.yml
+RUN sh -c "./pkg2appimage recipes/client.yml 2>&1 | tee build.log"
 

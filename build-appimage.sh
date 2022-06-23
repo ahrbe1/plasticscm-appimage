@@ -25,9 +25,11 @@
 # For more information, please refer to <http://unlicense.org/>
 
 set -xe
+rm -f build.log *.AppImage
 docker build -t client:latest .
 docker create --name extract client:latest
 docker cp extract:/root/out/Plastic_SCM-.glibc2.25-x86_64.AppImage Plastic_SCM_Client.glibc2.25-x86_64.AppImage
+docker cp extract:/root/build.log build.log
 docker rm extract
 ls -lh Plastic_SCM_Client.glibc2.25-x86_64.AppImage
 

@@ -1,3 +1,5 @@
 *.AppImage
 squashfs-root
+*.log
+*.swp
 

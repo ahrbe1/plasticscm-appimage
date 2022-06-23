@@ -1,0 +1,8 @@
+*.md
+*.log
+*.AppImage
+*.sh
+*.swp
+LICENSE
+CHANGELOG
+Dockerfile

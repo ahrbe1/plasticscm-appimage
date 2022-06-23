@@ -27,6 +27,23 @@ script:
   - rm usr/bin/legacyplasticgui
   - rm usr/bin/plasticgui
   - rm usr/bin/plasticapi
+  - ln -s ../../opt/plasticscm5/client/cm usr/bin/cm
+  - ln -s ../../opt/plasticscm5/client/lingluonx usr/bin/gluon
+  - ln -s ../../opt/plasticscm5/client/gtkmergetool usr/bin/gtkmergetool
+  - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/gtkplastic
+  - ln -s ../../opt/plasticscm5/client/legacygluon usr/bin/legacygluon
+  - ln -s ../../opt/plasticscm5/client/legacyplasticgui usr/bin/legacyplasticgui
+  - ln -s ../../opt/plasticscm5/client/plasticapi usr/bin/plasticapi
+  - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/plasticgui
+  - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/linplasticx
   - rm AppRun
-  - ln -s opt/plasticscm5/client/linplasticx AppRun
+  - cat > AppRun <<\EOF
+  - #!/bin/bash
+  - export GIO_MODULE_DIR=$APPDIR/usr/lib/x86_64-linux-gnu/gio/modules
+  - export PATH=$APPDIR/usr/bin/:$APPDIR/usr/sbin/:$APPDIR/bin/:$APPDIR/sbin/:$PATH
+  - export LD_LIBRARY_PATH=$APPDIR/usr/lib/:$APPDIR/usr/lib/i386-linux-gnu/:$APPDIR/usr/lib/x86_64-linux-gnu/:$APPDIR/usr/lib32/:$APPDIR/usr/lib64/:$APPDIR/lib/:$APPDIR/lib/i386-linux-gnu/:$APPDIR/lib/x86_64-linux-gnu/:$APPDIR/lib32/:$APPDIR/lib64/:$LD_LIBRARY_PATH
+  - $APPDIR/usr/bin/linplasticx $@
+  - exit $?
+  - EOF
+  - chmod +x AppRun
 
