@@ -32,6 +32,7 @@ RUN sh -c "wget https://www.plasticscm.com/plasticrepo/stable/ubuntu/Release.key
 RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y imagemagick file desktop-file-utils binutils
 RUN wget https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage && chmod +x pkg2appimage
 COPY recipes /root/recipes
+COPY AppRun /root/
 ENV PATH=$PATH:/usr/lib/x86_64-linux-gnu/glib-2.0/
 ENV ARCH=x86_64
 RUN sh -c "./pkg2appimage recipes/client.yml 2>&1 | tee build.log"

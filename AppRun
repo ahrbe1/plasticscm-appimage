@@ -1,0 +1,45 @@
+#!/bin/bash
+export GIO_MODULE_DIR=$APPDIR/usr/lib/x86_64-linux-gnu/gio/modules
+export PATH=$APPDIR/usr/bin/:$APPDIR/usr/sbin/:$APPDIR/bin/:$APPDIR/sbin/:$PATH
+export LD_LIBRARY_PATH=$APPDIR/opt/plasticscm5/client:$APPDIR/usr/lib/:$APPDIR/usr/lib/i386-linux-gnu/:$APPDIR/usr/lib/x86_64-linux-gnu/:$APPDIR/usr/lib32/:$APPDIR/usr/lib64/:$APPDIR/lib/:$APPDIR/lib/i386-linux-gnu/:$APPDIR/lib/x86_64-linux-gnu/:$APPDIR/lib32/:$APPDIR/lib64/:$LD_LIBRARY_PATH
+APPNAME=$(basename $ARGV0)
+echo "APPNAME IS: $APPNAME"
+case "$APPNAME" in
+    cm)
+        $APPDIR/usr/bin/cm $@
+        exit $?
+        ;;
+    gluon)
+        $APPDIR/usr/bin/gluon $@
+        exit $?
+        ;;
+    gtkmergetool)
+        $APPDIR/usr/bin/gtkmergetool $@
+        exit $?
+        ;;
+    gtkplastic)
+        $APPDIR/usr/bin/gtkplastic $@
+        exit $?
+        ;;
+    legacygluon)
+        $APPDIR/usr/bin/legacygluon $@
+        exit $?
+        ;;
+    legacyplasticgui)
+        $APPDIR/usr/bin/legacyplasticgui $@
+        exit $?
+        ;;
+    plasticgui)
+        $APPDIR/usr/bin/plasticgui $@
+        exit $?
+        ;;
+    linplasticx)
+        $APPDIR/usr/bin/linplasticx $@
+        exit $?
+        ;;
+    *)
+        $APPDIR/usr/bin/linplasticx $@
+        exit $?
+        ;;
+esac
+

@@ -28,6 +28,7 @@ set -xe
 rm -rf out
 mkdir out
 docker build -t client:latest .
+docker rm -f extract
 docker create --name extract client:latest
 docker cp extract:/root/out/Plastic_SCM-.glibc2.25-x86_64.AppImage out/Plastic_SCM_Client.glibc2.25-x86_64.AppImage
 docker cp extract:/root/build.log out/build.log

@@ -1,3 +1,10 @@
+2022-07-15
+* Fixed: error loading libgnomeui in plasticx.debug.log.txt
+* Fixed: error loading iconnofilesanddirectorieslight.svg in plasticx.debug.log.txt
+* Fixed: remove stale docker container before build
+* Added: build now exposes the following tools: cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
+* Changed: Updated README.md to describe how to access the exposed tools
+
 2022-06-23
 * Added: More content to the README.md
 
