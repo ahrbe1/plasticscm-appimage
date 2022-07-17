@@ -1,3 +1,6 @@
+2022-07-17
+* Changed: Plastic SCM version number now appears in the filename
+
 2022-07-15
 * Fixed: error loading libgnomeui in plasticx.debug.log.txt
 * Fixed: error loading iconnofilesanddirectorieslight.svg in plasticx.debug.log.txt

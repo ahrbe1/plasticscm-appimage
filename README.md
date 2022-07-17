@@ -1,4 +1,4 @@
-# PlasticSCM AppImage Build Script
+# PlasticSCM AppImage Packaging Utility
 
 June, 2022
 
@@ -34,7 +34,7 @@ resulting AppImage can be found in the `out` folder. You
 can run it with:
 
 ```
-$ ./out/Plastic_SCM_Client.glibc2.25-x86_64.AppImage
+$ ./out/Plastic_SCM_Client*.AppImage
 ```
 
 The build now exposes the command-line tools as well. You
@@ -53,11 +53,11 @@ will autodetect which tool you want to start:
 As an example:
 
 ```
-$ sudo cp Plastic_SCM_Client.glibc2.25-x86_64.AppImage /opt/
+$ sudo cp Plastic_SCM_Client*.AppImage /opt/
 $ mkdir -p ~/.local/bin
 $ for cmd in cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
   do
-    ln -s /opt/Plastic_SCM_Client.glibc2.25-x86_64.AppImage ~/.local/bin/$cmd
+    ln -s /opt/Plastic_SCM_Client*.AppImage ~/.local/bin/$cmd
   done
 ```
 
@@ -73,17 +73,6 @@ have other docker images that you don't want pruned.
 
 You will need to rebuild the AppImage when new versions of the
 PlasticSCM utilities are available.
-
-This has been lightly tested on Ubuntu 20.04 and 22.04, but has
-not yet been tested on other systems.
-
-Also, this is really just a band-aid until Plastic SCM is updated
-to run on modern distros that only have GTK3. Ubuntu 18.04 will
-stop receiving security updates soon, and Gtk2 has already been
-removed from most modern distros. That may not bode well for the
-future of Plastic SCM on Linux.
-
-Plastic SCM folks: Please, please fix the Linux version.
 
 ## Contributing
 

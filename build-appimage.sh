@@ -30,8 +30,12 @@ mkdir out
 docker build -t client:latest .
 docker rm -f extract
 docker create --name extract client:latest
-docker cp extract:/root/out/Plastic_SCM-.glibc2.25-x86_64.AppImage out/Plastic_SCM_Client.glibc2.25-x86_64.AppImage
+docker cp extract:/root/out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client.AppImage
 docker cp extract:/root/build.log out/build.log
+docker cp extract:/root/VERSION out/VERSION
+docker cp extract:/root/SUFFIX out/SUFFIX
 docker rm extract
-ls -lh out/Plastic_SCM_Client.glibc2.25-x86_64.AppImage
+mv out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client-$(cat out/VERSION)-$(cat out/SUFFIX).AppImage
+rm -f out/SUFFIX out/VERSION
+ls -lh out/Plastic_SCM_Client-*.AppImage
 

@@ -36,4 +36,7 @@ COPY AppRun /root/
 ENV PATH=$PATH:/usr/lib/x86_64-linux-gnu/glib-2.0/
 ENV ARCH=x86_64
 RUN sh -c "./pkg2appimage recipes/client.yml 2>&1 | tee build.log"
+RUN sh -c "ls -1 /root/out/Plastic_SCM*.AppImage | cut -f 2,3 -d. > SUFFIX"
+RUN sh -c "ls -1 Plastic_SCM/plasticscm-client-core*.deb | cut -f3 -d_ > VERSION"
+RUN mv /root/out/Plastic_SCM*.AppImage /root/out/Plastic_SCM_Client.AppImage
 
