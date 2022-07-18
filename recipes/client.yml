@@ -18,7 +18,7 @@ ingredients:
     - apt-get download plasticscm-client-gtk plasticscm-certtools-mono4 plasticscm-client-core plasticscm-gnome-sharp-mono4 plasticscm-gtk-sharp-mono4 plasticscm-mono4 plasticscm-theme libgnomeui-0
 script:
   - pwd
-  - mv usr/share/applications/plasticx.desktop Plastic_SCM.desktop
+  - cp usr/share/applications/plasticx.desktop Plastic_SCM.desktop
   - cp opt/plasticscm5/theme/gtk/icons/gtkplastic.png opt/plasticscm5/theme/gtk/icons/gtkplastic.ico.png
   - rm usr/bin/cm
   - rm usr/bin/gluon

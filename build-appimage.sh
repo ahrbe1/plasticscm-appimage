@@ -24,18 +24,175 @@
 # 
 # For more information, please refer to <http://unlicense.org/>
 
-set -xe
-rm -rf out
-mkdir out
-docker build -t client:latest .
-docker rm -f extract
-docker create --name extract client:latest
-docker cp extract:/root/out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client.AppImage
-docker cp extract:/root/build.log out/build.log
-docker cp extract:/root/VERSION out/VERSION
-docker cp extract:/root/SUFFIX out/SUFFIX
-docker rm extract
-mv out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client-$(cat out/VERSION)-$(cat out/SUFFIX).AppImage
-rm -f out/SUFFIX out/VERSION
-ls -lh out/Plastic_SCM_Client-*.AppImage
+# **********************************************
+# parse arguments
+# **********************************************
+
+VERSION="1.2.0"
+
+DO_PRUNE="n"     # n: no; y: yes
+INSTALL_MODE="n" # n: neither; i: install; u: uninstall
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -p|--prune)
+            DO_PRUNE="y"
+            shift
+            ;;
+        -i|--install)
+            INSTALL_MODE="i"
+            shift
+            ;;
+        -u|--uninstall)
+            INSTALL_MODE="u"
+            shift
+            ;;
+        -v|--version)
+            echo "version $VERSION"
+            exit 1
+            ;;
+        -h|--help)
+            echo "usage: $(basename $0) [-i|--install] [-u|--uninstall]"
+            echo "         [-p|--prune] [-h|--help] [-v|--version]"
+            echo
+            echo "options:"
+            echo "  -i|--install    install the application"
+            echo "  -u|--uninstall  uninstall the application"
+            echo "  -p|--prune      run 'docker image prune' after build"
+            echo "  -h|--help       show this help text"
+            echo "  -v|--version    show version information"
+            echo
+            exit 1
+            ;;
+        -*|--*)
+            echo "error: unknown option '$1'"
+            exit 1
+            ;;
+        *)
+            echo "error: program takes no positional arguments"
+            exit 1
+            ;;
+    esac
+done
+
+# **********************************************
+# build
+# **********************************************
+
+run() {
+    echo $*
+    $*
+}
+
+if [[ "$INSTALL_MODE" != "u" ]]; then
+    rm -rf out
+    mkdir -p out out/icons out/apps
+    run docker build -t client:latest .
+
+    CONTAINER_EXISTS="$(docker container ls -a | grep extract)"
+    if [[ -n "$CONTAINER_EXISTS" ]]; then
+        docker rm -f extract
+    fi
+
+    docker create --name extract client:latest
+    docker cp extract:/root/out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client.AppImage
+    docker cp extract:/root/build.log out/build.log
+    docker cp extract:/root/VERSION out/VERSION
+    docker cp extract:/root/SUFFIX out/SUFFIX
+    docker cp extract:/root/icons out/
+    docker cp extract:/root/apps out/
+    docker rm extract
+    mv out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client-$(cat out/VERSION)-$(cat out/SUFFIX).AppImage
+    ls -lh out/Plastic_SCM_Client-*.AppImage
+fi
+
+# **********************************************
+# fix desktop files
+# **********************************************
+fix_desktop_file() {
+    FPATH=$1
+    echo "fix_desktop_file $FPATH"
+
+    # redirect launcher to the AppImage
+    sed -i -e "s:/opt/plasticscm5/client/:$HOME/.local/bin/:" $FPATH
+
+    # use absolute path for gtkmergetool
+    sed -i -e "s:Exec=gtkmergetool:Exec=$HOME/.local/bin/gtkmergetool:" $FPATH
+
+    # fix icon paths
+    sed -i -e "s:/opt/plasticscm5/theme/gtk/:$HOME/.local/share/plasticscm/:" $FPATH
+
+    # fix lingluonx -> gluon (existing bug in the *.desktop file)
+    sed -i -e "s:lingluonx:gluon:" $FPATH
+
+    # set StartupNotify=false
+    if ! grep -q StartupNotify $FPATH ; then
+        sed -i -e '/^Icon=.*/a StartupNotify=false' $FPATH
+    fi
+}
+
+# **********************************************
+# install
+# **********************************************
+if [[ "$INSTALL_MODE" = "i" ]]; then
+    # check directories
+    for DIR in $HOME/.local/share/applications $HOME/.local/opt $HOME/.local/bin $HOME/.local/share/plasticscm/icons
+    do
+        if [[ ! -d "$DIR" ]]; then
+            run mkdir -p "$DIR"
+        fi
+    done
+
+    APPIMAGE=$(ls -1 out/Plastic_SCM_Client-*.AppImage | xargs basename)
+
+    # install appimage
+    run cp out/$APPIMAGE $HOME/.local/opt/$APPIMAGE
+
+    # install symlinks
+    for CMD in cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
+    do
+        run ln -sf $HOME/.local/opt/$APPIMAGE $HOME/.local/bin/$CMD
+    done
+
+    # install icons
+    for ICO in out/icons/*
+    do
+        ICO=$(basename $ICO)
+        run cp out/icons/$ICO $HOME/.local/share/plasticscm/icons/$ICO
+    done
+
+    # install desktop files
+    for APP in out/apps/*
+    do
+        APP=$(basename $APP)
+        fix_desktop_file out/apps/$APP
+        run cp out/apps/$APP $HOME/.local/share/applications/$APP
+    done
+
+    # check that ~/.local/bin is in $PATH
+    if [[ ! ( ":$PATH:" == *":$HOME/.local/bin:"* ) ]]; then
+        echo "warning: your $$PATH does not contain $HOME/.local/bin"
+    fi
+fi
+
+# **********************************************
+# uninstall
+# **********************************************
+if [[ "$INSTALL_MODE" = "u" ]]; then
+    run rm -f $HOME/.local/share/applications/plasticx.desktop
+    run rm -f $HOME/.local/share/applications/gluonx.desktop
+    run rm -rf $HOME/.local/share/plasticscm
+    run rm -f $HOME/.local/opt/Plastic_SCM_Client*.AppImage
+    for CMD in cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
+    do
+        run rm -f $HOME/.local/bin/$CMD
+    done
+fi
+
+# **********************************************
+# prune
+# **********************************************
+if [ "$DO_PRUNE" = "y" ]; then
+    run docker image prune -f
+fi
 

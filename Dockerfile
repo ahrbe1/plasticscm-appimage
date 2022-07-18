@@ -39,4 +39,9 @@ RUN sh -c "./pkg2appimage recipes/client.yml 2>&1 | tee build.log"
 RUN sh -c "ls -1 /root/out/Plastic_SCM*.AppImage | cut -f 2,3 -d. > SUFFIX"
 RUN sh -c "ls -1 Plastic_SCM/plasticscm-client-core*.deb | cut -f3 -d_ > VERSION"
 RUN mv /root/out/Plastic_SCM*.AppImage /root/out/Plastic_SCM_Client.AppImage
+RUN mkdir icons apps
+RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/opt/plasticscm5/theme/gtk/icons/gtkgluon.ico icons/
+RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/opt/plasticscm5/theme/gtk/icons/gtkplastic.ico icons/
+RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/usr/share/applications/plasticx.desktop apps/
+RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/usr/share/applications/gluonx.desktop apps/
 
