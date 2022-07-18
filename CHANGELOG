@@ -1,5 +1,7 @@
 2022-07-17
 * Changed: Plastic SCM version number now appears in the filename
+* Added: command-line options to install/uninstall the AppImage
+* Added: lots of content to the README.md file
 
 2022-07-15
 * Fixed: error loading libgnomeui in plasticx.debug.log.txt

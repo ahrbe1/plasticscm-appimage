@@ -22,10 +22,10 @@ See https://github.com/AppImage/pkg2appimage
 ## Prerequisites
 
 You only need access to a Linux machine with Docker on it
-to build the AppImage. Once built, the AppImage is a
-standalone program that has no dependency on docker. No
-modifications are made to your system unless --install or
---uninstall are used.
+to build the AppImage. 
+
+Once built, the AppImage is a standalone program that has
+no dependency on docker.
 
 If you've never used docker, basically you just need to
 install it via your system's package manager, and then add
@@ -34,21 +34,7 @@ you should be ready to go.
 
 ## Usage
 
-```
-$ ./build-appimage.sh -h
-usage: build-appimage.sh [-i|--install] [-u|--uninstall]
-         [-p|--prune] [-h|--help] [-v|--version]
-
-options:
-  -i|--install    install the application
-  -u|--uninstall  uninstall the application
-  -p|--prune      run 'docker image prune' after build
-  -h|--help       show this help text
-  -v|--version    show version information
-
-```
-
-**Build and Install**
+**TLDR; Build and Install**
 
 ```
 $ git clone https://github.com/ahrbe1/plasticscm-appimage.git
@@ -83,6 +69,25 @@ The resulting AppImage can be found in the `out` folder.
 $ ls out/*.AppImage
 out/Plastic_SCM_Client-11.0.16.7195-glibc2.25-x86_64.AppImage
 ```
+
+**Program Usage**
+
+```
+$ ./build-appimage.sh -h
+usage: build-appimage.sh [-i|--install] [-u|--uninstall]
+         [-p|--prune] [-h|--help] [-v|--version]
+
+options:
+  -i|--install    install the application
+  -u|--uninstall  uninstall the application
+  -p|--prune      run 'docker image prune' after build
+  -h|--help       show this help text
+  -v|--version    show version information
+
+```
+
+No modifications are made to your system unless `--install`,
+`--uninstall`, or `--prune` are used.
 
 ## Command Line Tools
 
