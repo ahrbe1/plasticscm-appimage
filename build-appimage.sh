@@ -103,7 +103,8 @@ done
 
 run() {
     echo $*
-    $*
+    eval "$(printf '%q ' "$@")"
+    return $?
 }
 
 if [[ "$INSTALL_MODE" != "u" ]]; then
