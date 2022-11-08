@@ -28,10 +28,32 @@
 # parse arguments
 # **********************************************
 
+set -euo pipefail
+
 VERSION="1.2.0"
 
 DO_PRUNE="n"     # n: no; y: yes
 INSTALL_MODE="n" # n: neither; i: install; u: uninstall
+
+requirements=(
+    "basename"
+    "docker"
+    "fusermount"
+    "sed"
+    "grep"
+    "cp"
+    "mkdir"
+    "ln"
+    "rm"
+    "ls"
+)
+
+for cmd in "${requirements[@]}"; do
+    if ! command -v "$cmd" > /dev/null ; then
+        echo "error: '$cmd' not found"
+        exit 1
+    fi
+done
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -85,25 +107,25 @@ run() {
 }
 
 if [[ "$INSTALL_MODE" != "u" ]]; then
-    rm -rf out
-    mkdir -p out out/icons out/apps
+    run rm -rf out
+    run mkdir -p out out/icons out/apps
     run docker build -t client:latest .
 
-    CONTAINER_EXISTS="$(docker container ls -a | grep extract)"
+    CONTAINER_EXISTS="$(docker container ls -a | grep extract)" || RET=$?
     if [[ -n "$CONTAINER_EXISTS" ]]; then
-        docker rm -f extract
+        run docker rm -f extract
     fi
 
-    docker create --name extract client:latest
-    docker cp extract:/root/out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client.AppImage
-    docker cp extract:/root/build.log out/build.log
-    docker cp extract:/root/VERSION out/VERSION
-    docker cp extract:/root/SUFFIX out/SUFFIX
-    docker cp extract:/root/icons out/
-    docker cp extract:/root/apps out/
-    docker rm extract
-    mv out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client-$(cat out/VERSION)-$(cat out/SUFFIX).AppImage
-    ls -lh out/Plastic_SCM_Client-*.AppImage
+    run docker run --name extract --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined client:latest 
+    run docker cp extract:/root/out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client.AppImage
+    run docker cp extract:/root/build.log out/build.log
+    run docker cp extract:/root/VERSION out/VERSION
+    run docker cp extract:/root/SUFFIX out/SUFFIX
+    run docker cp extract:/root/icons out/
+    run docker cp extract:/root/apps out/
+    run docker rm extract
+    run mv out/Plastic_SCM_Client.AppImage out/Plastic_SCM_Client-$(cat out/VERSION)-$(cat out/SUFFIX).AppImage
+    run ls -lh out/Plastic_SCM_Client-*.AppImage
 fi
 
 # **********************************************
@@ -114,20 +136,20 @@ fix_desktop_file() {
     echo "fix_desktop_file $FPATH"
 
     # redirect launcher to the AppImage
-    sed -i -e "s:/opt/plasticscm5/client/:$HOME/.local/bin/:" $FPATH
+    run sed -i -e "s:/opt/plasticscm5/client/:$HOME/.local/bin/:" $FPATH
 
     # use absolute path for gtkmergetool
-    sed -i -e "s:Exec=gtkmergetool:Exec=$HOME/.local/bin/gtkmergetool:" $FPATH
+    run sed -i -e "s:Exec=gtkmergetool:Exec=$HOME/.local/bin/gtkmergetool:" $FPATH
 
     # fix icon paths
-    sed -i -e "s:/opt/plasticscm5/theme/gtk/:$HOME/.local/share/plasticscm/:" $FPATH
+    run sed -i -e "s:/opt/plasticscm5/theme/gtk/:$HOME/.local/share/plasticscm/:" $FPATH
 
     # fix lingluonx -> gluon (existing bug in the *.desktop file)
-    sed -i -e "s:lingluonx:gluon:" $FPATH
+    run sed -i -e "s:lingluonx:gluon:" $FPATH
 
     # set StartupNotify=false
     if ! grep -q StartupNotify $FPATH ; then
-        sed -i -e '/^Icon=.*/a StartupNotify=false' $FPATH
+        run sed -i -e '/^Icon=.*/a StartupNotify=false' $FPATH
     fi
 }
 

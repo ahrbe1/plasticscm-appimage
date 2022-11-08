@@ -21,16 +21,27 @@ See https://github.com/AppImage/pkg2appimage
 
 ## Prerequisites
 
-You only need access to a Linux machine with Docker on it
-to build the AppImage. 
+You only need access to a Linux machine with Docker and Fuse
+on it to build the AppImage. 
 
 Once built, the AppImage is a standalone program that has
-no dependency on docker.
+no dependency on docker. AppImages typically require Fuse
+to mount.
 
 If you've never used docker, basically you just need to
 install it via your system's package manager, and then add
 yourself to the `docker` group. Log out, log back in, and
 you should be ready to go.
+
+On debian/ubuntu based systems, you can accomplish this
+with the following:
+
+```
+$ sudo apt-get update
+$ sudo apt-get install docker.io fuse
+$ sudo usermod -a -G docker $USER
+$ sudo reboot
+```
 
 ## Usage
 

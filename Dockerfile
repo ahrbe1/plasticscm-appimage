@@ -27,21 +27,13 @@ FROM ubuntu:18.04
 WORKDIR /root
 
 RUN apt-get update && apt-get install -y apt-transport-https apt-utils wget gpg
-RUN sh -c "echo 'deb https://www.plasticscm.com/plasticrepo/stable/ubuntu/ ./' | tee /etc/apt/sources.list.d/plasticscm-stable.list"
-RUN sh -c "wget https://www.plasticscm.com/plasticrepo/stable/ubuntu/Release.key -O - | apt-key add -"
-RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y imagemagick file desktop-file-utils binutils
+RUN bash -c "set -euo pipefail ; echo 'deb https://www.plasticscm.com/plasticrepo/stable/ubuntu/ ./' | tee /etc/apt/sources.list.d/plasticscm-stable.list"
+RUN bash -c "set -euo pipefail ; wget https://www.plasticscm.com/plasticrepo/stable/ubuntu/Release.key -O - | apt-key add -"
+RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get install -y imagemagick file desktop-file-utils binutils fuse sudo libglib2.0-bin
 RUN wget https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage && chmod +x pkg2appimage
 COPY recipes /root/recipes
 COPY AppRun /root/
-ENV PATH=$PATH:/usr/lib/x86_64-linux-gnu/glib-2.0/
-ENV ARCH=x86_64
-RUN sh -c "./pkg2appimage recipes/client.yml 2>&1 | tee build.log"
-RUN sh -c "ls -1 /root/out/Plastic_SCM*.AppImage | cut -f 2,3 -d. > SUFFIX"
-RUN sh -c "ls -1 Plastic_SCM/plasticscm-client-core*.deb | cut -f3 -d_ > VERSION"
-RUN mv /root/out/Plastic_SCM*.AppImage /root/out/Plastic_SCM_Client.AppImage
-RUN mkdir icons apps
-RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/opt/plasticscm5/theme/gtk/icons/gtkgluon.ico icons/
-RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/opt/plasticscm5/theme/gtk/icons/gtkplastic.ico icons/
-RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/usr/share/applications/plasticx.desktop apps/
-RUN cp /root/Plastic_SCM/Plastic_SCM.AppDir/usr/share/applications/gluonx.desktop apps/
+COPY entrypoint /root/
+RUN chmod +x /root/entrypoint
+ENTRYPOINT [ "/root/entrypoint" ]
 
