@@ -97,6 +97,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+exit_status() {
+    RET=$?
+    if [ $RET -eq 0 ]; then
+		echo "SUCCESS!"
+	else
+		echo "FAILED"
+	fi
+}
+
+trap exit_status EXIT
+
 # **********************************************
 # build
 # **********************************************
