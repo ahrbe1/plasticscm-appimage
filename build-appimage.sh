@@ -183,7 +183,7 @@ if [[ "$INSTALL_MODE" = "i" ]]; then
     run cp out/$APPIMAGE $HOME/.local/opt/$APPIMAGE
 
     # install symlinks
-    for CMD in cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
+    for CMD in cm gluon gtkmergetool plasticgui linplasticx
     do
         run ln -sf $HOME/.local/opt/$APPIMAGE $HOME/.local/bin/$CMD
     done
