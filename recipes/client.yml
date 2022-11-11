@@ -2,57 +2,27 @@ app: Plastic_SCM
 ingredients:
   dist: bionic
   packages:
-    - plasticscm-client-gtk
-    - plasticscm-certtools-mono4
-    - plasticscm-client-core
-    - plasticscm-gnome-sharp-mono4
-    - plasticscm-gtk-sharp-mono4
-    - plasticscm-mono4
-    - plasticscm-theme
-    - libgnomeui-0
-    - libgtk2.0-0
-    - libc6
-    - libpango-1.0-0
-    - libpangocairo-1.0-0
-    - libgdk-pixbuf2.0-0
-    - libtiff5
-    - libpng16-16
-    - libcairo2
-    - libpixman-1-0
-    - libjbig0
-    - libzstd1
-    - liblz4-1
-    - libbz2-1.0
-    - libbrotli1
-    - libjpeg-turbo8
+    - plasticscm-client-complete
   sources:
     - deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe
     - deb https://www.plasticscm.com/plasticrepo/stable/ubuntu
   script:
     - pwd
-    - apt-get download plasticscm-client-gtk plasticscm-certtools-mono4 plasticscm-client-core plasticscm-gnome-sharp-mono4 plasticscm-gtk-sharp-mono4 plasticscm-mono4 plasticscm-theme
-    - apt-get download libgnomeui-0 libgtk2.0-0 libc6 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libtiff5 libpng16-16 libcairo2 libpixman-1-0 libjpeg8 libjbig0 libzstd1 liblz4-1
-    - apt-get download libbz2-1.0 libbrotli1 libjpeg-turbo8 libexpat1
+    - wget https://www.plasticscm.com/plasticrepo/stable/ubuntu/Packages.gz
+    - apt-get download $(apt-cache depends --with-source Packages.gz --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances --no-pre-depends plasticscm-client-complete | grep "^\w")
 script:
   - pwd
   - cp usr/share/applications/plasticx.desktop Plastic_SCM.desktop
-  - cp opt/plasticscm5/theme/gtk/icons/gtkplastic.ico opt/plasticscm5/theme/gtk/icons/gtkplastic.ico.png
+  - cp opt/plasticscm5/theme/avalonia/icons/linplasticx.ico opt/plasticscm5/theme/avalonia/icons/linplasticx.ico.png
   - rm -f usr/bin/cm
   - rm -f usr/bin/gluon
   - rm -f usr/bin/gtkmergetool
-  - rm -f usr/bin/gtkplastic
-  - rm -f usr/bin/legacygluon
-  - rm -f usr/bin/legacyplasticgui
   - rm -f usr/bin/plasticgui
   - ln -s ../../opt/plasticscm5/client/cm usr/bin/cm
   - ln -s ../../opt/plasticscm5/client/lingluonx usr/bin/gluon
   - ln -s ../../opt/plasticscm5/client/gtkmergetool usr/bin/gtkmergetool
-  - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/gtkplastic
-  - ln -s ../../opt/plasticscm5/client/legacygluon usr/bin/legacygluon
-  - ln -s ../../opt/plasticscm5/client/legacyplasticgui usr/bin/legacyplasticgui
   - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/plasticgui
   - ln -s ../../opt/plasticscm5/client/linplasticx usr/bin/linplasticx
-  - cp opt/plasticscm5/theme/avalonia/icons/iconfolder.svg opt/plasticscm5/theme/avalonia/icons/iconnofilesanddirectorieslight.svg
   - rm AppRun
   - cp /root/AppRun .
   - chmod +x AppRun

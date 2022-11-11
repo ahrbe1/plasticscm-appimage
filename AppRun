@@ -16,18 +16,6 @@ case "$APPNAME" in
         $APPDIR/usr/bin/gtkmergetool $@
         exit $?
         ;;
-    gtkplastic)
-        $APPDIR/usr/bin/gtkplastic $@
-        exit $?
-        ;;
-    legacygluon)
-        $APPDIR/usr/bin/legacygluon $@
-        exit $?
-        ;;
-    legacyplasticgui)
-        $APPDIR/usr/bin/legacyplasticgui $@
-        exit $?
-        ;;
     plasticgui)
         $APPDIR/usr/bin/plasticgui $@
         exit $?
