@@ -110,9 +110,6 @@ which tool you want to start:
 - cm
 - gluon
 - gtkmergetool
-- gtkplastic
-- legacygluon
-- legacyplasticgui
 - plasticgui
 - linplasticx
 
@@ -121,7 +118,7 @@ As an example:
 ```
 $ sudo cp Plastic_SCM_Client*.AppImage /opt/
 $ mkdir -p ~/.local/bin
-$ for cmd in cm gluon gtkmergetool gtkplastic legacygluon legacyplasticgui plasticgui linplasticx
+$ for cmd in cm gluon gtkmergetool plasticgui linplasticx
   do
     ln -s /opt/Plastic_SCM_Client*.AppImage ~/.local/bin/$cmd
   done
